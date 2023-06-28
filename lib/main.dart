@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gowallet/db/category/category_db.dart';
+import 'package:gowallet/db/transactions/transaction_db.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -36,12 +38,19 @@ class MyApp extends StatelessWidget {
       statusBarColor: Colors.yellow[300],
     ));
 
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.yellow,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create:(context) => CategoryProvider()),
+        ChangeNotifierProvider(create:(context) => TransactionProvider()),
+
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.yellow,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Splash(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: Splash(),
     );
   }
 }

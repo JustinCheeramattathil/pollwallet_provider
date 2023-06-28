@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 import '../../../db/category/category_db.dart';
@@ -21,7 +22,7 @@ class _Screen_CategoryState extends State<Screen_Category>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-    CategoryDB().refreshUI();
+    context.read<CategoryProvider>().refreshUI();
     super.initState();
   }
 

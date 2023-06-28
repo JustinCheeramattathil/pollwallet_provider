@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../../../db/transactions/transaction_db.dart';
 import '../../../models/category/category_model.dart';
@@ -12,7 +13,7 @@ import '../../../models/transaction/transaction_model.dart';
 import '../edit_transaction/edit_transaction.dart';
 import 'view_Transaction.dart';
 
-late var dropDownVale;
+
 
 class TransationListView extends StatefulWidget {
   TransationListView({
@@ -21,6 +22,14 @@ class TransationListView extends StatefulWidget {
   }) : super(key: key);
 
   List<TransactionModel> results = [];
+
+    String dropdownvalue = 'All';
+  var items = [
+    'All',
+    'income',
+    'Expense',
+  ];
+
 
   @override
   State<TransationListView> createState() => _DropdownListState();
@@ -31,12 +40,7 @@ class _DropdownListState extends State<TransationListView> {
     return DateFormat.MMMd().format(date);
   }
 
-  String dropdownvalue = 'All';
-  var items = [
-    'All',
-    'income',
-    'Expense',
-  ];
+ 
 
   @override
   void initState() {
@@ -119,7 +123,7 @@ class _DropdownListState extends State<TransationListView> {
                                             child: Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              TransactionDB.instance
+                                              context.read<TransactionProvider>()
                                                   .deleteTransaction(
                                                       _value.id!);
                                               Navigator.of(context).pop();

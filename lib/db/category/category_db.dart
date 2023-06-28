@@ -6,30 +6,18 @@ import '../../models/category/category_model.dart';
 
 const CATEGORY_DB_NAME = 'category_database';
 
-abstract class CategoryDbFunctions {
-  Future<List<CategoryModel>> getCategories();
-  Future<void> insertCategory(CategoryModel value);
-  Future<void> deleteCategory(String categoryID);
-}
 
-class CategoryDB implements CategoryDbFunctions {
-  CategoryDB._internal();
 
-  static CategoryDB instance = CategoryDB._internal();
+class CategoryProvider with ChangeNotifier {
+  
+  List<CategoryModel> incomeCategoryListListener = [];
+  List<CategoryModel> expenseCategoryListListener = [];
 
-  factory CategoryDB() {
-    return instance;
-  }
 
-  ValueNotifier<List<CategoryModel>> incomeCategoryListListener =
-      ValueNotifier([]);
-  ValueNotifier<List<CategoryModel>> expenseCategoryListListener =
-      ValueNotifier([]);
   @override
   Future<void> insertCategory(CategoryModel value) async {
     final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
     await categoryDB.put(value.id, value);
-
     refreshUI();
   }
 
@@ -37,25 +25,26 @@ class CategoryDB implements CategoryDbFunctions {
   Future<List<CategoryModel>> getCategories() async {
     final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
     return categoryDB.values.toList();
+    
   }
 
   Future<void> refreshUI() async {
     final allCategories = await getCategories();
-    
-    incomeCategoryListListener.value.clear();
-    expenseCategoryListListener.value.clear();
+
+    incomeCategoryListListener.clear();
+    expenseCategoryListListener.clear();
     await Future.forEach(
       allCategories,
       (CategoryModel category) {
         if (category.type == CategoryType.income) {
-          incomeCategoryListListener.value.add(category);
+          incomeCategoryListListener.add(category);
         } else {
-          expenseCategoryListListener.value.add(category);
+          expenseCategoryListListener.add(category);
         }
       },
     );
-    incomeCategoryListListener.notifyListeners();
-    expenseCategoryListListener.notifyListeners();
+    notifyListeners();
+   
   }
 
   @override
@@ -63,5 +52,6 @@ class CategoryDB implements CategoryDbFunctions {
     final categoryDB = await Hive.openBox<CategoryModel>(CATEGORY_DB_NAME);
     await categoryDB.delete(categoryID);
     refreshUI();
+    notifyListeners();
   }
 }

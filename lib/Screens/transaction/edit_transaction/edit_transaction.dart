@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../db/category/category_db.dart';
 import '../../../db/transactions/transaction_db.dart';
@@ -44,7 +45,7 @@ class _EditTransactionState extends State<EditTransaction> {
 
   @override
   Widget build(BuildContext context) {
-      log(widget.model.id.toString(),name: 'buildcon');
+      // log(widget.model.id.toString(),name: 'buildcon');
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -282,9 +283,9 @@ class _EditTransactionState extends State<EditTransaction> {
                           ),
                           value: _categoryID,
                           items: (_selectedCategorytype == CategoryType.income
-                                  ? CategoryDB().incomeCategoryListListener
-                                  : CategoryDB().expenseCategoryListListener)
-                              .value
+                                  ? context.watch<CategoryProvider>().incomeCategoryListListener
+                                  : context.watch<CategoryProvider>().expenseCategoryListListener)
+                              
                               .map((e) {
                             return DropdownMenuItem(
                               value: e.id,
@@ -320,7 +321,7 @@ class _EditTransactionState extends State<EditTransaction> {
                           fixedSize: Size(200, 60),
                         ),
                         onPressed: () {
-                            log(widget.model.id.toString(),name: 'onpress');
+                            // log(widget.model.id.toString(),name: 'onpress');
                           editTransaction();
                         },
                         child: const Text(
@@ -359,7 +360,7 @@ class _EditTransactionState extends State<EditTransaction> {
     if (_parsedAmount == null) {
       return;
     }
-    log(widget.model.id.toString(),name: 'hjuikjnj');
+    // log(widget.model.id.toString(),name: 'hjuikjnj');
 
     final _model = TransactionModel(
         purpose: _purposeText,
@@ -369,9 +370,9 @@ class _EditTransactionState extends State<EditTransaction> {
         category: _selectedCategoryModel!,
         id: widget.model.id);
 
-    await TransactionDB.instance.editTransaction(_model);
+    await context.read<TransactionProvider>().editTransaction(_model);
     RootPage.selectedIndexNotifier.value = 1;
     Navigator.of(context).pop();
-    TransactionDB.instance.refreshAll();
+    context.read<TransactionProvider>().refreshAll();
   }
 }

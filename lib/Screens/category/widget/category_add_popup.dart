@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../db/category/category_db.dart';
 import '../../../models/category/category_model.dart';
@@ -50,9 +51,13 @@ Future<void> showCategoryAddPopup(BuildContext context) async {
                 final _name = _nameEditingController.text;
                 final check =
                     selectedCategoryNotifier.value == CategoryType.income
-                        ? CategoryDB.instance.incomeCategoryListListener.value
+                        ? context
+                            .read<CategoryProvider>()
+                            .incomeCategoryListListener
                             .where((element) => element.name.contains(_name))
-                        : CategoryDB.instance.expenseCategoryListListener.value
+                        : context
+                            .read<CategoryProvider>()
+                            .expenseCategoryListListener
                             .where((element) => element.name.contains(_name));
                 log(check.toString());
                 if (check.isNotEmpty) {
@@ -68,7 +73,7 @@ Future<void> showCategoryAddPopup(BuildContext context) async {
                     name: _name,
                     type: _type);
 
-                CategoryDB.instance.insertCategory(_Category);
+                context.read<CategoryProvider>().insertCategory(_Category);
                 Navigator.of(ctx).pop();
               },
               child: Text('Add'),

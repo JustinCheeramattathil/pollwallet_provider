@@ -49,7 +49,7 @@ String yesterday = DateFormat.yMd().format(
 );
 
 filterFunction() async {
-  final list = await TransactionDB.instance.accessTransactions();
+  final list = await TransactionProvider().accessTransactions();
   overviewNotifier.value.clear();
   incomeNotifier1.value.clear();
   expenseNotifier1.value.clear();

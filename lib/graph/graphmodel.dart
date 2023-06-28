@@ -20,7 +20,7 @@ chartLogic(List<TransactionModel> model) {
   for (var i = 0; i < model.length; i++) {
     value = model[i].amount.toDouble();
     categoryname = model[i].category.name;
-   
+
     log(model[i].category.type.toString());
     for (var j = i + 1; j < model.length; j++) {
       if (model[i].category.name == model[j].category.name) {
@@ -33,5 +33,6 @@ chartLogic(List<TransactionModel> model) {
       newData.add(ChartDatas(amount: value, category: categoryname));
     }
   }
+
   return newData;
 }

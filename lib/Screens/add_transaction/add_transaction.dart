@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../db/category/category_db.dart';
 import '../../db/transactions/transaction_db.dart';
@@ -28,7 +29,7 @@ class _AddTransactionState extends State<AddTransaction> {
 
   @override
   void initState() {
-    CategoryDB.instance.refreshUI();
+    context.read<CategoryProvider>().refreshUI();
     _selectedCategorytype = CategoryType.income;
     super.initState();
   }
@@ -272,9 +273,12 @@ class _AddTransactionState extends State<AddTransaction> {
                           ),
                           value: _categoryID,
                           items: (_selectedCategorytype == CategoryType.income
-                                  ? CategoryDB().incomeCategoryListListener
-                                  : CategoryDB().expenseCategoryListListener)
-                              .value
+                                  ? context
+                                      .watch<CategoryProvider>()
+                                      .incomeCategoryListListener
+                                  : context
+                                      .watch<CategoryProvider>()
+                                      .expenseCategoryListListener)
                               .map((e) {
                             return DropdownMenuItem(
                               value: e.id,
@@ -359,8 +363,8 @@ class _AddTransactionState extends State<AddTransaction> {
         category: _selectedCategoryModel!,
         id: DateTime.now().millisecondsSinceEpoch.toString());
 
-    await TransactionDB.instance.addTransaction(_model);
+    await context.read<TransactionProvider>().addTransaction(_model);
     RootPage.selectedIndexNotifier.value = 1;
-    TransactionDB.instance.refreshAll();
+    context.read<TransactionProvider>().refreshAll();
   }
 }

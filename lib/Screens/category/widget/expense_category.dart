@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 
 import '../../../db/category/category_db.dart';
 import '../../../models/category/category_model.dart';
@@ -9,12 +10,13 @@ class ExpenseCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: CategoryDB().expenseCategoryListListener,
-        builder: (BuildContext ctx, List<CategoryModel> newlist, Widget? _) {
+    return Consumer<CategoryProvider>(
+      
+        builder: (context, value, child) {
+     
           return ListView.separated(
             itemBuilder: (context, index) {
-              final category = newlist[index];
+              final category = value.expenseCategoryListListener[index];
               return Container(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -43,7 +45,7 @@ class ExpenseCategory extends StatelessWidget {
                                       ),
                                       TextButton(
                                           onPressed: () {
-                                            CategoryDB.instance
+                                           context.read<CategoryProvider>()
                                                 .deleteCategory(category.id);
                                             Navigator.of(context).pop();
                                           },
@@ -68,7 +70,7 @@ class ExpenseCategory extends StatelessWidget {
                 height: 10,
               );
             },
-            itemCount: newlist.length,
+            itemCount: value.expenseCategoryListListener.length,
           );
         });
   }

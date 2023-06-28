@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gowallet/Screens/search/widgets/main_search.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../../Account/balance.dart';
 import 'widgets/rootpage.dart';
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    TransactionDB.instance.refreshAll();
+    context.watch<TransactionProvider>().refreshAll();
     balanceAmount();
     var time = DateTime.now();
 
@@ -53,8 +55,9 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(right: 20),
               child: IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Search()));
+                    // Navigator.of(context).push(
+                    //     MaterialPageRoute(builder: (context) => Search()));
+                    showSearch(context: context, delegate: MySearchDelegate());
                   },
                   icon: Icon(IconlyLight.search)),
             )
@@ -271,16 +274,14 @@ class _HomePageState extends State<HomePage> {
                   child: Text('View All')),
             ],
           ),
-          ValueListenableBuilder(
-            valueListenable: TransactionDB.instance.transactionListNotifietr,
-            builder: (BuildContext context, List<TransactionModel> newList,
-                Widget? _) {
+          Consumer<TransactionProvider>(
+            builder: (context, newList, child) {
               return Expanded(
-                  child: newList.isNotEmpty
+                  child: newList.transactionList.isNotEmpty
                       ? ListView.separated(
                           padding: const EdgeInsets.all(10),
                           itemBuilder: (context, index) {
-                            final value = newList[index];
+                            final value = newList.transactionList[index];
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -351,8 +352,9 @@ class _HomePageState extends State<HomePage> {
                                                               Text('Cancel')),
                                                       TextButton(
                                                           onPressed: () {
-                                                            TransactionDB
-                                                                .instance
+                                                            context
+                                                                .read<
+                                                                    TransactionProvider>()
                                                                 .deleteTransaction(
                                                                     value.id!);
                                                             Navigator.of(
@@ -433,7 +435,7 @@ class _HomePageState extends State<HomePage> {
                               height: 10,
                             );
                           },
-                          itemCount: newList.length,
+                          itemCount: newList.transactionList.length,
                         )
                       : Center(
                           child: SizedBox(
