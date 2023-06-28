@@ -268,6 +268,19 @@ class _Screen_TransactionState extends State<Screen_Transaction>
       ),
       body: Consumer<TransactionProvider>(
         builder: (context, value, child) {
+          if (_tabController.index == 0) {
+            context.read<TransactionProvider>().results = [];
+            context.read<TransactionProvider>().results =
+                context.read<TransactionProvider>().transationAll;
+          }
+          _tabController.addListener(() {
+            context.read<TransactionProvider>().results =
+                context.read<TransactionProvider>().transationAll;
+
+            context.read<TransactionProvider>().filter(
+                context.read<TransactionProvider>().dropDownVale,
+                _tabController);
+          });
           return Column(
             children: [
               Padding(

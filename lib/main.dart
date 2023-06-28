@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gowallet/db/category/category_db.dart';
 import 'package:gowallet/db/transactions/transaction_db.dart';
+import 'package:gowallet/providers/addtransaction/add_transaction_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -8,8 +9,6 @@ import 'Screens/splash/splash.dart';
 import 'models/category/category_model.dart';
 import 'models/transaction/transaction_model.dart';
 import 'package:flutter/services.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,9 +39,9 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create:(context) => CategoryProvider()),
-        ChangeNotifierProvider(create:(context) => TransactionProvider()),
-
+        ChangeNotifierProvider(create: (context) => CategoryProvider()),
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
+        ChangeNotifierProvider(create: (context) => AddTransactionProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

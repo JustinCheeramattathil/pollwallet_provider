@@ -41,7 +41,6 @@ class _Statistics_ScreenState extends State<Statistics_Screen>
     filterFunction();
     chartdivertFunctionExpense();
     chartdivertFunctionIncome();
-
     super.initState();
   }
 
@@ -50,6 +49,9 @@ class _Statistics_ScreenState extends State<Statistics_Screen>
 
   @override
   Widget build(BuildContext context) {
+    filterFunction();
+    chartdivertFunctionExpense();
+    chartdivertFunctionIncome();
     context.watch<TransactionProvider>().refreshAll();
 
     double width = MediaQuery.of(context).size.width;

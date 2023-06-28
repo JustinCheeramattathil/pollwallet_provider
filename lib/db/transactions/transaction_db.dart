@@ -17,13 +17,18 @@ class TransactionProvider with ChangeNotifier {
   List<TransactionModel> expenseListenable = [];
   List<TransactionModel> transationAll = [];
 
+  late TabController _tabController;
+
+  
+
   @override
   Future<void> addTransaction(TransactionModel obj) async {
     final db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
 
     db.put(obj.id, obj);
-    // log(obj.id.toString(), name: 'add');
+    log(obj.id.toString(), name: 'add');
     refreshAll();
+    notifyListeners();
   }
 
   Future<void> refreshAll() async {
@@ -48,6 +53,8 @@ class TransactionProvider with ChangeNotifier {
       transationAll.add(transation);
     });
     notifyListeners();
+
+    // log(transationAll[0].purpose, name: 'ggg');
   }
 
   @override
@@ -61,6 +68,7 @@ class TransactionProvider with ChangeNotifier {
     final _db = await Hive.openBox<TransactionModel>(TRANSACTION_DB_NAME);
     await _db.delete(id);
     refreshAll();
+    notifyListeners();
   }
 
   @override
@@ -229,5 +237,11 @@ class TransactionProvider with ChangeNotifier {
           .toList();
       notifyListeners();
     }
+  }
+
+  void tabcontrollerchange(TabController tab) async {
+    _tabController = tab;
+    notifyListeners();
+   
   }
 }
