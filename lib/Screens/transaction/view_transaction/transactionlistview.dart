@@ -13,8 +13,6 @@ import '../../../models/transaction/transaction_model.dart';
 import '../edit_transaction/edit_transaction.dart';
 import 'view_Transaction.dart';
 
-
-
 class TransationListView extends StatefulWidget {
   TransationListView({
     Key? key,
@@ -23,13 +21,12 @@ class TransationListView extends StatefulWidget {
 
   List<TransactionModel> results = [];
 
-    String dropdownvalue = 'All';
+  String dropdownvalue = 'All';
   var items = [
     'All',
     'income',
     'Expense',
   ];
-
 
   @override
   State<TransationListView> createState() => _DropdownListState();
@@ -40,8 +37,6 @@ class _DropdownListState extends State<TransationListView> {
     return DateFormat.MMMd().format(date);
   }
 
- 
-
   @override
   void initState() {
     super.initState();
@@ -49,19 +44,16 @@ class _DropdownListState extends State<TransationListView> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.results.length.toString());
     return Material(
         color: Colors.yellow[300],
         child: widget.results.isNotEmpty
             ? ListView.separated(
                 padding: const EdgeInsets.all(10),
                 itemBuilder: (context, index) {
-                  final 
-                  _value = widget.results[index];
-                  log(_value.id.toString(), name: 'valu check');
+                  final _value = widget.results[index];
+
                   return GestureDetector(
                     onTap: () {
-                      log(_value.id.toString(), name: 'gesture');
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -123,7 +115,8 @@ class _DropdownListState extends State<TransationListView> {
                                             child: Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              context.read<TransactionProvider>()
+                                              context
+                                                  .read<TransactionProvider>()
                                                   .deleteTransaction(
                                                       _value.id!);
                                               Navigator.of(context).pop();

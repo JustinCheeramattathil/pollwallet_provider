@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gowallet/db/category/category_db.dart';
 import 'package:gowallet/db/transactions/transaction_db.dart';
 import 'package:gowallet/providers/addtransaction/add_transaction_provider.dart';
+import 'package:gowallet/providers/edittransaction/edit_transaction_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => TransactionProvider()),
         ChangeNotifierProvider(create: (context) => AddTransactionProvider()),
+        ChangeNotifierProvider(create: (context) => EditTransactionProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

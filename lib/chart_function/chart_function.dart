@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -72,7 +74,7 @@ filterFunction() async {
     } else if (element.category.type == CategoryType.expense) {
       expenseNotifier1.value.add(element);
     }
-
+    log(element.toString());
     overviewNotifier.value.add(element);
   }
 
@@ -153,6 +155,7 @@ filterFunction() async {
       expenseLastMonthNotifier.value.add(element);
     }
   }
+
   overviewNotifier.notifyListeners();
   todayNotifier.notifyListeners();
   yesterdayNotifier.notifyListeners();

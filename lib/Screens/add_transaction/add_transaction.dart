@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:gowallet/chart_function/chart_function.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ class _AddTransactionState extends State<AddTransaction> {
   // CategoryType? _selectedCategorytype;
   CategoryModel? _selectedCategoryModel;
 
-  String? _categoryID;
+  // String? _categoryID;
 
   final _formkey = GlobalKey<FormState>();
 
@@ -56,6 +57,7 @@ class _AddTransactionState extends State<AddTransaction> {
         backgroundColor: Colors.yellow[300],
         body: Consumer<AddTransactionProvider>(
           builder: (context, provider, _) {
+        
             log('hello');
             return SingleChildScrollView(
               child: Container(
@@ -161,10 +163,6 @@ class _AddTransactionState extends State<AddTransaction> {
                                   return;
                                 } else {
                                   print(_selectedDate.toString());
-                                  // setState(() {
-                                  //   _selectedDate = _selectedDateTemp;
-                                  // });
-
                                   provider
                                       .updateSelectedDate(_selectedDateTemp);
                                 }
@@ -189,7 +187,7 @@ class _AddTransactionState extends State<AddTransaction> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _categoryID = null;
+                                provider.updateCategoryId(null);
                                 provider.updateSelectedCategoryType(
                                     CategoryType.income);
                               },
@@ -214,13 +212,7 @@ class _AddTransactionState extends State<AddTransaction> {
                                         groupValue:
                                             provider.selectedCategorytype,
                                         activeColor: Colors.black,
-                                        onChanged: (newValue) {
-                                          // setState(() {
-                                          //   _selectedCategorytype =
-                                          //       CategoryType.income;
-                                          //   _categoryID = null;
-                                          // });
-                                        }),
+                                        onChanged: (newValue) {}),
                                     Text(
                                       'Income',
                                       style: TextStyle(color: Colors.black),
@@ -234,7 +226,7 @@ class _AddTransactionState extends State<AddTransaction> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _categoryID = null;
+                                provider.updateCategoryId(null);
                                 provider.updateSelectedCategoryType(
                                     CategoryType.expense);
                               },
@@ -259,17 +251,7 @@ class _AddTransactionState extends State<AddTransaction> {
                                         groupValue:
                                             provider.selectedCategorytype,
                                         activeColor: Colors.black,
-                                        onChanged: (newValue) {
-                                          // setState(() {
-                                          //   _selectedCategorytype =
-                                          //       CategoryType.expense;
-                                          //   _categoryID = null;
-                                          // });
-                                          log(newValue.toString(), name: 'com');
-                                          // provider.updateSelectedCategoryType(
-                                          //     CategoryType.expense);
-                                          // _categoryID = null;
-                                        }),
+                                        onChanged: (newValue) {}),
                                     const Text(
                                       'Expense',
                                       style: TextStyle(color: Colors.black),
@@ -303,7 +285,7 @@ class _AddTransactionState extends State<AddTransaction> {
                                 'Select Category',
                                 style: TextStyle(color: Colors.black),
                               ),
-                              value: _categoryID,
+                              value: provider.categoryID,
                               items: (provider.selectedCategorytype ==
                                           CategoryType.income
                                       ? context
@@ -320,16 +302,18 @@ class _AddTransactionState extends State<AddTransaction> {
                                     style: TextStyle(color: Colors.black),
                                   ),
                                   onTap: () {
-                                    print(e.toString());
+                                    // print(e.toString());
                                     provider.selectedCategoryModel = e;
                                   },
                                 );
                               }).toList(),
                               onChanged: (selectedValue) {
-                                print(selectedValue);
-                                setState(() {
-                                  _categoryID = selectedValue;
-                                });
+                                // print(selectedValue);
+                                // setState(() {
+                                //   _categoryID = selectedValue;
+                                // });
+                                provider.updateCategoryId(selectedValue);
+                                log(selectedValue.toString());
                               },
                             ),
                           ),
@@ -351,7 +335,8 @@ class _AddTransactionState extends State<AddTransaction> {
                               addTransaction(
                                   provider.selectedCategorytype,
                                   provider.selectedDate,
-                                  provider.selectedCategoryModel);
+                                  provider.selectedCategoryModel,
+                                  provider.categoryID);
 
                               Navigator.of(context).pop();
                             },
@@ -371,11 +356,8 @@ class _AddTransactionState extends State<AddTransaction> {
     );
   }
 
-  Future<void> addTransaction(
-    CategoryType Ctype,
-    DateTime? selectedDate,
-    CategoryModel? selectedCategoryModel,
-  ) async {
+  Future<void> addTransaction(CategoryType Ctype, DateTime? selectedDate,
+      CategoryModel? selectedCategoryModel, String? categoryID) async {
     log('insidecalled');
     final _purposeText = _purposeTextEditingController.text.trim();
     final _amountText = _amountTextEditingController.text.trim();
@@ -387,7 +369,7 @@ class _AddTransactionState extends State<AddTransaction> {
       log('l2');
       return;
     }
-    if (_categoryID == null) {
+    if (categoryID == null) {
       log('l3');
       return;
     }

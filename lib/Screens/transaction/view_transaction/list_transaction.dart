@@ -171,6 +171,7 @@
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gowallet/chart_function/chart_function.dart';
 import 'package:iconly/iconly.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -196,10 +197,9 @@ class _Screen_TransactionState extends State<Screen_Transaction>
   void initState() {
     context.read<TransactionProvider>().dropDownVale;
     context.read<TransactionProvider>().results.clear();
-
     context.read<TransactionProvider>().results =
         context.read<TransactionProvider>().transationAll;
-
+    filterFunction();
     super.initState();
     _tabController = TabController(vsync: this, length: 3);
     _tabController.addListener(() {
@@ -219,8 +219,8 @@ class _Screen_TransactionState extends State<Screen_Transaction>
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<TransactionProvider>().refreshAll();
-    // context.watch<CategoryProvider>().refreshUI();
+    context.watch<TransactionProvider>().refreshAll();
+    context.watch<CategoryProvider>().refreshUI();
 
     return Scaffold(
       appBar: AppBar(
@@ -268,11 +268,11 @@ class _Screen_TransactionState extends State<Screen_Transaction>
       ),
       body: Consumer<TransactionProvider>(
         builder: (context, value, child) {
-          if (_tabController.index == 0) {
-            context.read<TransactionProvider>().results = [];
-            context.read<TransactionProvider>().results =
-                context.read<TransactionProvider>().transationAll;
-          }
+          // if (_tabController.index == 0) {
+          //   context.read<TransactionProvider>().results = [];
+          //   context.read<TransactionProvider>().results =
+          //       context.read<TransactionProvider>().transationAll;
+          // }
           _tabController.addListener(() {
             context.read<TransactionProvider>().results =
                 context.read<TransactionProvider>().transationAll;

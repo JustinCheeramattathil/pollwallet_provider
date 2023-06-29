@@ -7,6 +7,7 @@ class AddTransactionProvider with ChangeNotifier {
   DateTime? _selectedDate;
   CategoryType selectedCategorytype = CategoryType.income;
   CategoryModel? selectedCategoryModel;
+  String? categoryID;
 
   DateTime? get selectedDate => _selectedDate;
   // CategoryType get selectedCategoryType => selectedCategorytype;
@@ -25,6 +26,11 @@ class AddTransactionProvider with ChangeNotifier {
 
   void updateSelectedCategoryModel(CategoryModel? model) {
     selectedCategoryModel = model;
+    notifyListeners();
+  }
+
+  void updateCategoryId(String? categoryiD) {
+    categoryID = categoryiD;
     notifyListeners();
   }
 }
